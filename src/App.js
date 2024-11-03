@@ -14,7 +14,7 @@ function App() {
   const promiseCallBack = (resolve, reject) => {
     setTimeout(() => {
       if (isServerRunning) {
-        resolve([{kay: 1, value: "Task 1"}, {kay: 2, value: "Task 2"}]);
+        resolve([{key: 1, value: "Task 1"}, {key: 2, value: "Task 2"}]);
       } else {
         reject("Server is not running");
       }
@@ -26,7 +26,7 @@ function App() {
     // promiseObject.then((data) => {setTaskList(data)}).catch((error) => {console.log(error)})
     try {
       const url = ''
-      const result = await fetch(url)
+      const result = await new Promise(promiseCallBack)
       setTaskList(result)
     } catch (error) {
       console.log(error)
@@ -102,7 +102,7 @@ function App() {
             : "Add a task"
         }
       />
-      {taskList.map((item, index) => {
+      {taskList.length && taskList.map((item, index) => {
         return (
           <p key={item.key}>
             {item.value}
