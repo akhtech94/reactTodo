@@ -9,32 +9,19 @@ function App() {
   const [viewConfirmationButtons, setViewConfirmationButtons] = useState(false);
   const [taskToBeDeleted, setTaskToBeDeleted] = useState();
 
-  const isServerRunning = true;
-
-  const promiseCallBack = (resolve, reject) => {
-    setTimeout(() => {
-      if (isServerRunning) {
-        resolve([{key: 1, value: "Task 1"}, {key: 2, value: "Task 2"}]);
-      } else {
-        reject("Server is not running");
-      }
-    }, [3000]);
+  const fetchTaskList = async () => {
+    try {
+      const url = 'https://jsonplaceholder.typicode.com/todos';
+      const response = await fetch(url);
+      const responseBody = await response.json();
+      setTaskList(responseBody);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
-  const netWorkCall_promise = async () => {
-    // const promiseObject = new Promise(promiseCallBack);
-    // promiseObject.then((data) => {setTaskList(data)}).catch((error) => {console.log(error)})
-    try {
-      const url = ''
-      const result = await new Promise(promiseCallBack)
-      setTaskList(result)
-    } catch (error) {
-      console.log(error)
-    }
-  }
-
   useEffect(() => {
-    netWorkCall_promise();
+    fetchTaskList();
   }, []);
 
   const handleInputChange = (event) => {
@@ -104,8 +91,8 @@ function App() {
       />
       {taskList.length && taskList.map((item, index) => {
         return (
-          <p key={item.key}>
-            {item.value}
+          <p key={item.id}>
+            {item.title}
             <input
               className="button"
               type="button"
